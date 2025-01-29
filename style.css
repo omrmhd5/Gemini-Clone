@@ -43,3 +43,44 @@
 body {
   background-color: var(--primary-color);
 }
+
+.header,
+.prompt_form {
+  margin: 0 auto;
+  max-width: 824px;
+}
+
+body.hide-header .header {
+  margin: 0;
+  display: none;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+.navbar_logo {
+  color: var(--text-secondary-color);
+  font-weight: 600;
+}
+
+.navbar_button {
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: none;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background 0.3 ease;
+}
+
+.navbar_button:hover {
+  background: var(--secondary-hover-color);
+}
