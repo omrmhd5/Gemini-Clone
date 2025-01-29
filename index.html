@@ -68,6 +68,31 @@
       </div>
     </header>
 
+    <section class="chats"></section>
+
+    <section class="prompt">
+      <form action="#" class="promp_form" novalidate>
+        <div class="prompt_input-wrapper">
+          <input
+            type="text"
+            placeholder="Enter a prompt here"
+            class="promp_form_input"
+            required
+          />
+          <button class="prompt_form-button" id="sendButton">
+            <i class="bx bx-send"></i>
+          </button>
+          <button class="prompt_form-button" id="deleteButton">
+            <i class="bx bx-trash"></i>
+          </button>
+        </div>
+      </form>
+      <p class="prompt_disclaim">
+        Gemini may display inaccurate info, including about people, so
+        double-check its responses
+      </p>
+    </section>
+
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="script.js"></script>
