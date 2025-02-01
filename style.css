@@ -322,6 +322,20 @@ chats {
   display: flex;
 }
 
+.chats .message_loading .message_loading-indicator .message_loading-bar {
+  height: 1rem;
+  width: 100%;
+  border-radius: 0.135rem;
+  background-position: -800px 0;
+  background: linear-gradient(
+    to right,
+    #2563eb60 30%,
+    var(--primary-color) 60%,
+    #2563eb60
+  );
+  animation: loading 3s linear infinite;
+}
+
 .chats .message_loading-indicator .message_loading-bar:first-child {
   width: 85%;
 }

@@ -132,7 +132,7 @@ const showTypingEffect = (
       addCopyButtonToCodeBlocks();
       copyIconElement.classList.remove("hide");
     }
-  }, 50);
+  }, 75);
 };
 
 //Fetch API Response Based On User Input
