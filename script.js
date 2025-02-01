@@ -152,6 +152,7 @@ const requestAPIResponse = async (incomingMessageElement) => {
     if (!response.ok) throw new Error("Invalid API Response");
 
     const parsedAPIResponse = marked.parse(responseText);
+    const rawAPIResponse = responseText;
 
     showTypingEffect(
       rawAPIResponse,
@@ -161,12 +162,13 @@ const requestAPIResponse = async (incomingMessageElement) => {
     );
 
     //Save Conversation In Local Storage
-    let savedConversations = JSON.parse(
-      localStorage.getItem(
-        "saved-api-chats",
-        JSON.stringify(savedConversations)
-      )
-    );
+    let savedConversations =
+      JSON.parse(localStorage.getItem("saved-api-chats")) || [];
+    savedConversations.push({
+      userMessage: currentUserMessage,
+      apiResponse: responseData,
+    });
+    localStorage.setItem("saved-api-chats", JSON.stringify(savedConversations));
   } catch (error) {
     isGeneratingResponse = false;
     messageTextElement.innerText = error.message;
