@@ -10,19 +10,19 @@ let currentUserMessage = null;
 let isGeneratingResponse = false;
 
 const GOOGLE_API_KEY = "AIzaSyCs_1-zN1OiNe2V774pbROTee_eQYY6Pcc";
-const API_REQUEST_URL = `"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GOOGLE_API_KEY}`;
+const API_REQUEST_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GOOGLE_API_KEY}`;
 
 // Load Saved Data From Local Storage
 const loadSavedChatHistory = () => {
   const savedConversations =
     JSON.parse(localStorage.getItem("saved-api-chats")) || [];
-  const isLightTheme = localStorage.getItem("theme-color") === "light_mode";
+  const isLightTheme = localStorage.getItem("themeColor") === "light_mode";
 
   document.body.classList.toggle("light_mode", isLightTheme);
 
   themeToggleButton.innerHTML = isLightTheme
-    ? "<i class='bx bx-moon></i>"
-    : "<i class='bx bx-sun></i>";
+    ? "<i class='bx bx-moon'></i>"
+    : "<i class='bx bx-sun'></i>";
 
   chatHistoryContainer = "";
 
@@ -30,12 +30,12 @@ const loadSavedChatHistory = () => {
   savedConversations.forEach((conversation) => {
     //Display The User's Messages
     const userMessageHTML = `
-    
+
     <div class = "message_content">
     <img class = "message_avatar" src = assets/profile.png" alt ="User Avatar">
     <p class = "message_text">${conversation.userMessage}</p>
     </div>
-    
+
     `;
 
     const outgoingMessageElement = createChatMessageElement(
@@ -134,7 +134,8 @@ const showTypingEffect = (
 
 //Fetch API Response Based On User Input
 const requestAPIResponse = async (incomingMessageElement) => {
-  const messageElement = incomingMessageElement.querySelector(".message_text");
+  const messageTextElement =
+    incomingMessageElement.querySelector(".message_text");
   try {
     const response = await fetch(API_REQUEST_URL, {
       method: "POST",
@@ -265,7 +266,7 @@ const handleOutgoingMessage = () => {
     <div class="message_content">
       <img class="message_avatar" src="assets/profile.png" alt="User Avatar">
       <p class="message_text"></p>
-    </div>  
+    </div>
   `;
 
   const outgoingMessageElement = createChatMessageElement(
@@ -289,7 +290,7 @@ themeToggleButton.addEventListener("click", () => {
 
   //Update Icon Based On Theme
   const newIconClass = isLightTheme ? "bx bx-moon" : "bx bx-sun";
-  themeToggleButton.querySelector("i").classLName = newIconClass;
+  themeToggleButton.querySelector("i").className = newIconClass;
 });
 
 //Clear All Chat History
@@ -316,7 +317,7 @@ suggestionItems.forEach((suggestion) => {
 });
 
 //Prevent Default From Submission And Handle Outgoing Message
-messageForm.addEventListener("click", (e) => {
+messageForm.addEventListener("submit", (e) => {
   e.preventDefault();
   handleOutgoingMessage();
 });
