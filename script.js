@@ -60,7 +60,10 @@ const loadSavedChatHistory = () => {
             <div class="message_loading-bar"></div>
         </div>
     </div>
-    <span onClick="copyMessageToClipboard(this)" class="message_icon hide"></i class='bx bx-copy-alt'></i></span>
+    <span onClick="copyMessageToClipboard(this)" class="message_icon hide">
+    <i class='bx bx-copy-alt'></i>
+    </span>
+
     `;
 
     const incomingMessageElement = createChatMessageElement(
