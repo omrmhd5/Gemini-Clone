@@ -174,3 +174,41 @@ const requestAPIResponse = async (incomingMessageElement) => {
     incomingMessageElement.classList.remove("message_loading");
   }
 };
+
+//Add Copy Button To Code Block
+const addCopyButtonToCodeBlocks = () => {
+  const codeBlocks = document.querySelectorAll("pre");
+  codeBlocks.forEach((block) => {
+    const codeElement = block.querySelector("code");
+    let language =
+      [...codeElement.classList]
+        .find((cls) => cls.startsWith("language-"))
+        ?.replace("language-", "") || "Text";
+
+    const languageLabel = document.createElement("div");
+    languageLabel.innerText =
+      language.charAt(0).toUpperCase() + language.slice(1);
+    languageLabel.classList.add("code_language-label");
+    block.appendChild(languageLabel);
+
+    const copyButton = document.createElement("button");
+    copyButton.innerHTML = `<i class='bx bx-copy'></i>`;
+    copyButton.classList.add("code_copy-btn");
+    block.appendChild(copyButton);
+
+    copyButton.addEventListener("click", () => {
+      navigator.clipboard
+        .writeText(codeElement.innerText)
+        .then(() => {
+          copyButton.innerHTML = `<i class='bx bx-check'></i>`;
+          setTimeout(
+            () => ((copyButton.innerHTML = `<i class='bx bx-copy'></i>`), 2000)
+          );
+        })
+        .catch((err) => {
+          console.error("Copy Failed: ", err);
+          alert("Unable To Copy Text!");
+        });
+    });
+  });
+};
