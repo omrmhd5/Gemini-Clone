@@ -87,9 +87,47 @@ const loadSavedChatHistory = () => {
 };
 
 //Create A New Chat Message Element
-const createChatMessageElement = a(htmlContent, ...cssClasses) => {
-    const messageElement = document.createElement("div");
-    messageElement.classList.add("message", ...cssClasses);
-    messageElement.innerHTML = htmlContent;
-    return messageElement;
-}
+const createChatMessageElement = (htmlContent, ...cssClasses) => {
+  const messageElement = document.createElement("div");
+  messageElement.classList.add("message", ...cssClasses);
+  messageElement.innerHTML = htmlContent;
+  return messageElement;
+};
+
+//Show Typing Effect
+const showTypingEffect = (
+  rawText,
+  htmlText,
+  messageElement,
+  incomingMessageElement,
+  skipEffect = false
+) => {
+  const copyIconElement = incomingMessageElement.querySelector(".message_icon");
+  copyIconElement.classList.add("hide"); // Initially Hide Copy Button
+
+  if (skipEffect) {
+    //Display Content Directly Without Typing
+    messageElement.innerHTML = htmlText;
+    hljs.highlightAll();
+    addCopyButtonToCodeBlocks();
+    copyIconElement.classList.remove("hide"); //Show Copy Button
+    isGeneratingResponse = false;
+    return;
+  }
+
+  const wordsArray = rawText.split(" ");
+  let wordIndex = 0;
+
+  const typingInterval = setInterval(() => {
+    messageElement.innerText +=
+      (wordIndex === 0 ? "" : " ") + wordsArray[wordIndex++];
+    if (wordIndex === wordsArray.length) {
+      clearInterval(typingInterval);
+      isGeneratingResponse = false;
+      messageElement.innerHTML = htmlText;
+      hljs.highlightAll();
+      addCopyButtonToCodeBlocks();
+      copyIconElement.classList.remove("hide");
+    }
+  }, 50);
+};
