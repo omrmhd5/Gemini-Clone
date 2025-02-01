@@ -16,9 +16,9 @@ const API_REQUEST_URL = `"https://generativelanguage.googleapis.com/v1beta/model
 const loadSavedChatHistory = () => {
   const savedConversations =
     JSON.parse(localStorage.getItem("saved-api-chats")) || [];
-  const isLightTheme = localStorage.getItem("theme-color") === "light-mode";
+  const isLightTheme = localStorage.getItem("theme-color") === "light_mode";
 
-  document.body.classList.toggle("light-mode", isLightTheme);
+  document.body.classList.toggle("light_mode", isLightTheme);
 
   themeToggleButton.innerHTML = isLightTheme
     ? "<i class='bx bx-moon></i>"
@@ -130,4 +130,47 @@ const showTypingEffect = (
       copyIconElement.classList.remove("hide");
     }
   }, 50);
+};
+
+//Fetch API Response Based On User Input
+const requestAPIResponse = async (incomingMessageElement) => {
+  const messageElement = incomingMessageElement.querySelector(".message_text");
+  try {
+    const response = await fetch(API_REQUEST_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: currentUserMessage }] }],
+      }),
+    });
+
+    const responseData = await response.json();
+    if (!response.ok) throw new Error(responseData.error.message);
+    const responseText =
+      responseData?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!response.ok) throw new Error("Invalid API Response");
+
+    const parsedAPIResponse = marked.parse(responseText);
+
+    showTypingEffect(
+      rawAPIResponse,
+      parsedAPIResponse,
+      messageTextElement,
+      incomingMessageElement
+    );
+
+    //Save Conversation In Local Storage
+    let savedConversations = JSON.parse(
+      localStorage.getItem(
+        "saved-api-chats",
+        JSON.stringify(savedConversations)
+      )
+    );
+  } catch (error) {
+    isGeneratingResponse = false;
+    messageTextElement.innerText = error.message;
+    messageTextElement.closest(".message").classList.add("message_error");
+  } finally {
+    incomingMessageElement.classList.remove("message_loading");
+  }
 };
