@@ -281,3 +281,13 @@ const handleOutgoingMessage = () => {
   document.body.classList.add("hide-header");
   setTimeout(displayLoadingAnimation, 500); //Show Loading Animation After Delay
 };
+
+//Toggle Between Light And Dark Themes
+themeToggleButton.addEventListener("click", () => {
+  const isLightTheme = document.body.classList.toggle("light_mode");
+  localStorage.setItem("themeColor", isLightTheme ? "light_mode" : "dark_mode");
+
+  //Update Icon Based On Theme
+  const newIconClass = isLightTheme ? "bx bx-moon" : "bx bx-sun";
+  themeToggleButton.querySelector("i").classLName = newIconClass;
+});
