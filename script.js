@@ -11,3 +11,77 @@ let isGeneratingResponse = false;
 
 const GOOGLE_API_KEY = "AIzaSyCs_1-zN1OiNe2V774pbROTee_eQYY6Pcc";
 const API_REQUEST_URL = `"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GOOGLE_API_KEY}`;
+
+// Load Saved Data From Local Storage
+const loadSavedChatHistory = () => {
+  const savedConversations =
+    JSON.parse(localStorage.getItem("saved-api-chats")) || [];
+  const isLightTheme = localStorage.getItem("theme-color") === "light-mode";
+
+  document.body.classList.toggle("light-mode", isLightTheme);
+
+  themeToggleButton.innerHTML = isLightTheme
+    ? "<i class='bx bx-moon></i>"
+    : "<i class='bx bx-sun></i>";
+
+  chatHistoryContainer = "";
+
+  // Iterate Through Saved Chat History And Display Messages
+  savedConversations.forEach((conversation) => {
+    //Display The User's Messages
+    const userMessageHTML = `
+    
+    <div class = "message_content">
+    <img class = "message_avatar" src = assets/profile.png" alt ="User Avatar">
+    <p class = "message_text">${conversation.userMessage}</p>
+    </div>
+    
+    `;
+
+    const outgoingMessageElement = createChatMessageElement(
+      userMessageHTML,
+      "message_outgoing"
+    );
+    chatHistoryContainer.appendChild(outgoingMessageElement);
+
+    //Display The API Response
+    const responseText =
+      conversation.apiResponse?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const parsedAPIResponse = marked.parse(responseText); // Convert to HTML
+    const rawAPIResponse = responseText; //Plain Text Version
+
+    const responseHTML = `
+    <div class="message_content">
+        <img class="message_avatar" src="assets/gemini.svg" alt="Gemini Avatar">
+        <p class="message_text"></p>
+        <div class="message_loading-indicator hide">
+            <div class="message_loading-bar"></div>
+            <div class="message_loading-bar"></div>
+            <div class="message_loading-bar"></div>
+        </div>
+    </div>
+    <span onClick="copyMessageToClipboard(this)" class="message_icon hide"></i class='bx bx-copy-alt'></i></span>
+    `;
+
+    const incomingMessageElement = createChatMessageElement(
+      responseHTML,
+      "message_incoming"
+    );
+    chatHistoryContainer.appendChild(incomingMessageElement);
+
+    const messageTextElement =
+      incomingMessageElement.querySelector(".message_text");
+
+    //Display Saved Chat Without Typing Effect
+
+    showTypingEffect(
+      rawAPIResponse,
+      parsedAPIResponse,
+      messageTextElement,
+      incomingMessageElement,
+      true
+    ); //'true' skips typing
+  });
+
+  document.body.classList.toggle("hide-header", savedConversations.length > 0);
+};
