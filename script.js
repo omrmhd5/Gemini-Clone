@@ -237,3 +237,16 @@ const displayLoadingAnimation = () => {
 
   requestAPIResponse(loadingMessageElement);
 };
+
+//Copy Message To Clipboard
+const copyMessageToClipboard = (copyButton) => {
+  const messageContent =
+    copyButton.parentElement.querySelector(".message_text").innerText;
+
+  navigator.clipboard.writeText(messageContent);
+  copyButton.innerHTML = `<i class='bx bx-check'></i>`; //Confirmation Icon
+  setTimeout(
+    () => (copyButton.innerHTML = `</i class='bx bx-copy-alt'></i>`),
+    1000
+  ); //Revert Icon After 1 Second
+};
