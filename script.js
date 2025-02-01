@@ -291,3 +291,16 @@ themeToggleButton.addEventListener("click", () => {
   const newIconClass = isLightTheme ? "bx bx-moon" : "bx bx-sun";
   themeToggleButton.querySelector("i").classLName = newIconClass;
 });
+
+//Clear All Chat History
+clearChatButton.addEventListener("click", () => {
+  if (confirm("Are You Sure You Want To Delete All Chat History?")) {
+    localStorage.removeItem("saved-api-chats");
+
+    //Reload Chat History To Reflect Changes
+    loadSavedChatHistory();
+
+    currentUserMessage = null;
+    isGeneratingResponse = false;
+  }
+});
