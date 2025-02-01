@@ -250,3 +250,34 @@ const copyMessageToClipboard = (copyButton) => {
     1000
   ); //Revert Icon After 1 Second
 };
+
+//Handle Sending Chat Messages
+
+const handleOutgoingMessage = () => {
+  currentUserMessage =
+    messageForm.querySelector(".prompt_form-input").value.trim() ||
+    currentUserMessage;
+  if (!currentUserMessage || isGeneratingResponse) return; //Exit If No Message Or Already Generating Response
+
+  isGeneratingResponse = true;
+
+  const outgoingMessageHTML = `
+    <div class="message_content">
+      <img class="message_avatar" src="assets/profile.png" alt="User Avatar">
+      <p class="message_text"></p>
+    </div>  
+  `;
+
+  const outgoingMessageElement = createChatMessageElement(
+    outgoingMessageHTML,
+    "message_outgoing"
+  );
+
+  outgoingMessageElement.querySelector(".message_text").innerText =
+    currentUserMessage;
+  chatHistoryContainer.appendChild(outgoingMessageElement);
+
+  messageForm.reset(); //Clear Input Field
+  document.body.classList.add("hide-header");
+  setTimeout(displayLoadingAnimation, 500); //Show Loading Animation After Delay
+};
