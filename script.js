@@ -212,3 +212,28 @@ const addCopyButtonToCodeBlocks = () => {
     });
   });
 };
+
+//Show Loading Animation During API Request
+const displayLoadingAnimation = () => {
+  const loadingHTML = `
+    <div class="message_content">
+        <img class="message_avatar" src="assets/gemini.svg" alt="Gemini Avatar">
+        <p class="message_text"></p>
+        <div class="message_loading-indicator">
+            <div class="message_loading-bar"></div>
+            <div class="message_loading-bar"></div>
+            <div class="message_loading-bar"></div>
+        </div>
+    </div>
+    <span onClick="copyMessageToClipboard(this)" class="message_icon hide"></i class='bx bx-copy-alt'></i></span>
+    `;
+
+  const loadingMessageElement = createChatMessageElement(
+    loadingHTML,
+    "message_incoming",
+    "message_loading"
+  );
+  chatHistoryContainer.appendChild(loadingMessageElement);
+
+  requestAPIResponse(loadingMessageElement);
+};
