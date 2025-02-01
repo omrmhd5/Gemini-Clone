@@ -304,3 +304,22 @@ clearChatButton.addEventListener("click", () => {
     isGeneratingResponse = false;
   }
 });
+
+//Handle Click On Suggestion Items
+suggestionItems.forEach((suggestion) => {
+  suggestion.addEventListener("click", () => {
+    currentUserMessage = suggestion.querySelector(
+      ".suggests_item-text"
+    ).innerText;
+    handleOutgoingMessage();
+  });
+});
+
+//Prevent Default From Submission And Handle Outgoing Message
+messageForm.addEventListener("click", (e) => {
+  e.preventDefault();
+  handleOutgoingMessage();
+});
+
+//Load Saved Chat History On Page Load
+loadSavedChatHistory();
