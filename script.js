@@ -28,14 +28,12 @@ const loadSavedChatHistory = () => {
 
   // Iterate Through Saved Chat History And Display Messages
   savedConversations.forEach((conversation) => {
-    //Display The User's Messages
+    // Display The User's Messages
     const userMessageHTML = `
-
-    <div class = "message_content">
-    <img class = "message_avatar" src = "assets/profile.png" alt ="User Avatar">
-    <p class = "message_text">${conversation.userMessage}</p>
-    </div>
-
+      <div class="message_content">
+        <img class="message_avatar" src="assets/profile.png" alt="User Avatar">
+        <p class="message_text">${conversation.userMessage}</p>
+      </div>
     `;
 
     const outgoingMessageElement = createChatMessageElement(
@@ -44,26 +42,25 @@ const loadSavedChatHistory = () => {
     );
     chatHistoryContainer.appendChild(outgoingMessageElement);
 
-    //Display The API Response
+    // Display The API Response
     const responseText =
       conversation.apiResponse?.candidates?.[0]?.content?.parts?.[0]?.text;
     const parsedAPIResponse = marked.parse(responseText); // Convert to HTML
-    const rawAPIResponse = responseText; //Plain Text Version
+    const rawAPIResponse = responseText; // Plain Text Version
 
     const responseHTML = `
-    <div class="message_content">
-        <img class="message_avatar" src="assets/gemini.svg" alt="Gemini Avatar">
-        <p class="message_text"></p>
-        <div class="message_loading-indicator hide">
-            <div class="message_loading-bar"></div>
-            <div class="message_loading-bar"></div>
-            <div class="message_loading-bar"></div>
-        </div>
-    </div>
-    <span onClick="copyMessageToClipboard(this)" class="message_icon hide">
-    <i class='bx bx-copy-alt'></i>
-    </span>
-
+      <div class="message_content">
+          <img class="message_avatar" src="assets/gemini.svg" alt="Gemini Avatar">
+          <p class="message_text"></p>
+          <div class="message_loading-indicator hide">
+              <div class="message_loading-bar"></div>
+              <div class="message_loading-bar"></div>
+              <div class="message_loading-bar"></div>
+          </div>
+      </div>
+      <span onClick="copyMessageToClipboard(this)" class="message_icon hide">
+      <i class='bx bx-copy-alt'></i>
+      </span>
     `;
 
     const incomingMessageElement = createChatMessageElement(
@@ -75,18 +72,20 @@ const loadSavedChatHistory = () => {
     const messageTextElement =
       incomingMessageElement.querySelector(".message_text");
 
-    //Display Saved Chat Without Typing Effect
-
+    // Display Saved Chat Without Typing Effect
     showTypingEffect(
       rawAPIResponse,
       parsedAPIResponse,
       messageTextElement,
       incomingMessageElement,
       true
-    ); //'true' skips typing
+    ); // 'true' skips typing
   });
 
   document.body.classList.toggle("hide-header", savedConversations.length > 0);
+
+  // Scroll to bottom after loading the chat history
+  scrollToBottom();
 };
 
 //Create A New Chat Message Element
@@ -109,12 +108,15 @@ const showTypingEffect = (
   copyIconElement.classList.add("hide"); // Initially Hide Copy Button
 
   if (skipEffect) {
-    //Display Content Directly Without Typing
+    // Display Content Directly Without Typing
     messageElement.innerHTML = htmlText;
     hljs.highlightAll();
     addCopyButtonToCodeBlocks();
-    copyIconElement.classList.remove("hide"); //Show Copy Button
+    copyIconElement.classList.remove("hide"); // Show Copy Button
     isGeneratingResponse = false;
+
+    // Scroll to bottom after displaying the message
+    scrollToBottom();
     return;
   }
 
@@ -131,6 +133,12 @@ const showTypingEffect = (
       hljs.highlightAll();
       addCopyButtonToCodeBlocks();
       copyIconElement.classList.remove("hide");
+
+      // Scroll to bottom after the typing effect completes
+      scrollToBottom();
+    } else {
+      // Scroll to bottom during the typing effect
+      scrollToBottom();
     }
   }, 75);
 };
@@ -286,6 +294,9 @@ const handleOutgoingMessage = () => {
 
   messageForm.reset(); //Clear Input Field
   document.body.classList.add("hide-header");
+
+  scrollToBottom();
+
   setTimeout(displayLoadingAnimation, 500); //Show Loading Animation After Delay
 };
 
@@ -327,6 +338,13 @@ messageForm.addEventListener("submit", (e) => {
   e.preventDefault();
   handleOutgoingMessage();
 });
+
+const scrollToBottom = () => {
+  chatHistoryContainer.scrollTo({
+    top: chatHistoryContainer.scrollHeight,
+    behavior: "smooth", // Smooth scrolling
+  });
+};
 
 //Load Saved Chat History On Page Load
 loadSavedChatHistory();
