@@ -10,7 +10,7 @@ let currentUserMessage = null;
 let isGeneratingResponse = false;
 
 const GOOGLE_API_KEY = "AIzaSyCs_1-zN1OiNe2V774pbROTee_eQYY6Pcc";
-const API_REQUEST_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GOOGLE_API_KEY}`;
+const API_REQUEST_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GOOGLE_API_KEY}`;
 
 // Load Saved Data From Local Storage
 const loadSavedChatHistory = () => {
@@ -24,7 +24,7 @@ const loadSavedChatHistory = () => {
     ? "<i class='bx bx-moon'></i>"
     : "<i class='bx bx-sun'></i>";
 
-  chatHistoryContainer = "";
+  chatHistoryContainer.innerHTML = "";
 
   // Iterate Through Saved Chat History And Display Messages
   savedConversations.forEach((conversation) => {
@@ -32,7 +32,7 @@ const loadSavedChatHistory = () => {
     const userMessageHTML = `
 
     <div class = "message_content">
-    <img class = "message_avatar" src = assets/profile.png" alt ="User Avatar">
+    <img class = "message_avatar" src = "assets/profile.png" alt ="User Avatar">
     <p class = "message_text">${conversation.userMessage}</p>
     </div>
 
@@ -152,7 +152,7 @@ const requestAPIResponse = async (incomingMessageElement) => {
     if (!response.ok) throw new Error(responseData.error.message);
     const responseText =
       responseData?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!response.ok) throw new Error("Invalid API Response");
+    if (!responseText) throw new Error("Invalid API response.");
 
     const parsedAPIResponse = marked.parse(responseText);
     const rawAPIResponse = responseText;
@@ -208,7 +208,8 @@ const addCopyButtonToCodeBlocks = () => {
         .then(() => {
           copyButton.innerHTML = `<i class='bx bx-check'></i>`;
           setTimeout(
-            () => ((copyButton.innerHTML = `<i class='bx bx-copy'></i>`), 2000)
+            () => (copyButton.innerHTML = `<i class='bx bx-copy'></i>`),
+            2000
           );
         })
         .catch((err) => {
@@ -231,7 +232,7 @@ const displayLoadingAnimation = () => {
             <div class="message_loading-bar"></div>
         </div>
     </div>
-    <span onClick="copyMessageToClipboard(this)" class="message_icon hide"></i class='bx bx-copy-alt'></i></span>
+    <span onClick="copyMessageToClipboard(this)" class="message_icon hide"><i class='bx bx-copy-alt'></i></span>
     `;
 
   const loadingMessageElement = createChatMessageElement(
@@ -252,7 +253,7 @@ const copyMessageToClipboard = (copyButton) => {
   navigator.clipboard.writeText(messageContent);
   copyButton.innerHTML = `<i class='bx bx-check'></i>`; //Confirmation Icon
   setTimeout(
-    () => (copyButton.innerHTML = `</i class='bx bx-copy-alt'></i>`),
+    () => (copyButton.innerHTML = `<i class='bx bx-copy-alt'></i>`),
     1000
   ); //Revert Icon After 1 Second
 };
