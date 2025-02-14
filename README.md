@@ -18,15 +18,15 @@ A simple AI chatbot inspired by Gemini, utilizing Google's Gemini API to simulat
 
 ### Home Page | Dark Mode
 
-![Screenshot 1](assets\homepageDarkMode.png)
+![Screenshot 1]![homepageDarkMode](https://github.com/user-attachments/assets/c23c259a-172e-47ca-97b9-36de0b303862)
 
 ### Home Page | Light Mode
 
-![Screenshot 2](assets\homepageLightMode.png)
+![Screenshot 2]![homepageLightMode](https://github.com/user-attachments/assets/94a752da-6f55-41cb-b05d-a43c409c8553)
 
 ### Conversation Page
 
-![Screenshot 3](assets\ConversationPage.png)
+![Screenshot 3]![ConversationPage](https://github.com/user-attachments/assets/a490b0c4-ccbc-4883-9895-55a30cd619b2)
 
 ---
 
